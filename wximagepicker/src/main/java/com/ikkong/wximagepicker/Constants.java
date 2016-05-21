@@ -1,4 +1,4 @@
-package com.ikkong.imagepickerdemo;
+package com.ikkong.wximagepicker;
 
 /**
  * Author:  ikkong

@@ -1,4 +1,4 @@
-package com.ikkong.imagepickerdemo;
+package com.ikkong.wximagepicker;
 
 import android.app.Activity;
 import android.content.Context;
@@ -51,7 +51,7 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<SelectedPicViewHold
     }
 
     public static interface OnRecyclerViewItemClickListener{
-        void onItemClick(View view,String data);
+        void onItemClick(View view, String data);
     }
 
     @Override
@@ -110,6 +110,7 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<SelectedPicViewHold
         return list;
     }
 }
+
 class SelectedPicViewHolder extends RecyclerView.ViewHolder{
     ImageView iv_img;
 

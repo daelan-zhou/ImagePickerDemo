@@ -1,4 +1,4 @@
-package com.ikkong.imagepickerdemo;
+package com.ikkong.wximagepicker;
 
 import android.content.DialogInterface;
 import android.content.Intent;

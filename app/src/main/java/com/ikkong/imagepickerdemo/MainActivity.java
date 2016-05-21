@@ -7,6 +7,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.ikkong.wximagepicker.Constants;
+import com.ikkong.wximagepicker.ImagePickerAdapter;
+import com.ikkong.wximagepicker.ImagePreviewDelActivity;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.loader.GlideImageLoader;
