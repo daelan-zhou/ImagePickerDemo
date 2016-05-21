@@ -23,22 +23,21 @@ public class MainActivity extends AppCompatActivity implements
 
     private RecyclerView recylerView;
     private ImagePickerAdapter adapter;
-    private ArrayList<ImageItem> selImageList;
+    private ArrayList<ImageItem> selImageList;//当前选择的所有图片
     private int maxImgCount = 8;//允许选择图片最大数
 
-    public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-    public static final int IMAGE_PREVIEW_ACTIVITY_REQUEST_CODE = 101;
+    
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        recylerView = (RecyclerView) findViewById(R.id.recylerView);
         initImagePicker();//最好放到 Application oncreate执行
         initWidget();
     }
 
     private void initWidget() {
+        recylerView = (RecyclerView) findViewById(R.id.recylerView);
         selImageList = new ArrayList<>();
         adapter = new ImagePickerAdapter(this,selImageList,maxImgCount);
         adapter.refresh();
@@ -67,13 +66,13 @@ public class MainActivity extends AppCompatActivity implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
-            if (data != null && requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (data != null && requestCode == Constants.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
                 ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
                 selImageList.addAll(selImageList.size()-1,images);
                 adapter.refresh();
             }
         }else if(resultCode == ImagePicker.RESULT_CODE_BACK){
-            if (data != null&& requestCode == IMAGE_PREVIEW_ACTIVITY_REQUEST_CODE) {
+            if (data != null&& requestCode == Constants.IMAGE_PREVIEW_ACTIVITY_REQUEST_CODE) {
                 ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_ITEMS);
                 selImageList.clear();
                 selImageList.addAll(images);
@@ -86,18 +85,19 @@ public class MainActivity extends AppCompatActivity implements
     public void onItemClick(View view, String data) {
         switch(data){
             case Constants.IMAGEITEM_DEFAULT_ADD:
+                //打开选择
                 //本次允许选择的数量
                 ImagePicker.getInstance().setSelectLimit(maxImgCount - selImageList.size() + 1);
                 //打开选择器
                 Intent intent = new Intent(this, ImageGridActivity.class);
-                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+                startActivityForResult(intent, Constants.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
                 break;
             default:
                 //打开预览
                 Intent intent1 = new Intent(this, ImagePreviewDelActivity.class);
                 intent1.putExtra(ImagePicker.EXTRA_IMAGE_ITEMS, adapter.getRealSelImage());
                 intent1.putExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION,Integer.parseInt(data));
-                startActivityForResult(intent1,IMAGE_PREVIEW_ACTIVITY_REQUEST_CODE);
+                startActivityForResult(intent1,Constants.IMAGE_PREVIEW_ACTIVITY_REQUEST_CODE);
                 break;
         }
     }
