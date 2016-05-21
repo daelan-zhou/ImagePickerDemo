@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Author:  ikkong
@@ -23,15 +23,15 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<SelectedPicViewHold
         View.OnClickListener {
     private int maxImgCount;
     private Context mContext;
-    private List<ImageItem> list;
+    private ArrayList<ImageItem> list;
     private LayoutInflater mInflater;
     private OnRecyclerViewItemClickListener listener;
 
-    public void setList(List<ImageItem> list) {
+    public void setList(ArrayList<ImageItem> list) {
         this.list = list;
     }
 
-    public ImagePickerAdapter(Context mContext,List<ImageItem> list,int maxImgCount) {
+    public ImagePickerAdapter(Context mContext,ArrayList<ImageItem> list,int maxImgCount) {
         this.mContext = mContext;
         this.list = list;
         this.maxImgCount = maxImgCount;
@@ -74,7 +74,6 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<SelectedPicViewHold
             //将数据保存在itemView的Tag中，以便点击时进行获取
             holder.itemView.setTag(Constants.IMAGEITEM_DEFAULT_ADD);
         }
-
     }
 
     @Override
@@ -97,6 +96,18 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<SelectedPicViewHold
             }
         }
         notifyDataSetChanged();
+    }
+    
+    public ArrayList<ImageItem> getRealSelImage(){
+        //由于图片未选满时，最后一张显示添加图片，因此这个方法返回真正的已选图片
+        if(list.get(list.size()-1).path.equals(Constants.IMAGEITEM_DEFAULT_ADD)){
+            ArrayList<ImageItem> arrayList = new ArrayList<>();
+            for(int i = 0; i<list.size()-1;i++){
+                arrayList.add(list.get(i));
+            }
+            return arrayList;
+        }
+        return list;
     }
 }
 class SelectedPicViewHolder extends RecyclerView.ViewHolder{

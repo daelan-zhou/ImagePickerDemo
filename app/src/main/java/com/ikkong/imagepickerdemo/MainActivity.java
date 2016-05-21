@@ -1,16 +1,12 @@
 package com.ikkong.imagepickerdemo;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.liangfeizc.slidepager.SlidePagerActivity;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.loader.GlideImageLoader;
@@ -18,17 +14,17 @@ import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.lzy.imagepicker.view.CropImageView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
         ImagePickerAdapter.OnRecyclerViewItemClickListener{
 
     private RecyclerView recylerView;
     private ImagePickerAdapter adapter;
-    private List<ImageItem> selImageList;
+    private ArrayList<ImageItem> selImageList;
     private int maxImgCount = 8;//允许选择图片最大数
 
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    public static final int IMAGE_PREVIEW_ACTIVITY_REQUEST_CODE = 101;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,26 +33,6 @@ public class MainActivity extends AppCompatActivity implements
         recylerView = (RecyclerView) findViewById(R.id.recylerView);
         initImagePicker();//最好放到 Application oncreate执行
         initWidget();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(SlidePagerActivity.ACTION_REMOVE_IMAGE);
-        registerReceiver(removeImageReceiver,filter);
-    }
-    
-    BroadcastReceiver removeImageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(SlidePagerActivity.ACTION_REMOVE_IMAGE)){
-                //接收到移除广播 
-                selImageList.remove(intent.getIntExtra(SlidePagerActivity.EXTRA_REMOVE_IMAGE_INDEX,-1));
-                adapter.refresh();
-            }
-        }
-    };
-
-    @Override
-    protected void onDestroy() {
-        unregisterReceiver(removeImageReceiver);
-        super.onDestroy();
     }
 
     private void initWidget() {
@@ -93,6 +69,13 @@ public class MainActivity extends AppCompatActivity implements
                 selImageList.addAll(selImageList.size()-1,images);
                 adapter.refresh();
             }
+        }else if(resultCode == ImagePicker.RESULT_CODE_BACK){
+            if (data != null&& requestCode == IMAGE_PREVIEW_ACTIVITY_REQUEST_CODE) {
+                ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_ITEMS);
+                selImageList.clear();
+                selImageList.addAll(images);
+                adapter.refresh();
+            }
         }
     }
 
@@ -107,25 +90,12 @@ public class MainActivity extends AppCompatActivity implements
                 startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
                 break;
             default:
-                String[] sArray = getPaths();
                 //打开预览
-                Intent intent1 = new Intent(this, SlidePagerActivity.class);
-                intent1.putExtra(SlidePagerActivity.EXTRA_TITLE, "");
-                intent1.putExtra(SlidePagerActivity.EXTRA_PICTURES, sArray);
-                intent1.putExtra(SlidePagerActivity.EXTRA_INDEX,Integer.parseInt(data));
-                startActivity(intent1);
+                Intent intent1 = new Intent(this, ImagePreviewDelActivity.class);
+                intent1.putExtra(ImagePicker.EXTRA_IMAGE_ITEMS, adapter.getRealSelImage());
+                intent1.putExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION,Integer.parseInt(data));
+                startActivityForResult(intent1,IMAGE_PREVIEW_ACTIVITY_REQUEST_CODE);
                 break;
         }
-    }
-    
-    private String[] getPaths(){
-        //判断最后一个图片是否是+号
-        boolean hasSpace = selImageList.get(selImageList.size()-1).path.equals(Constants.IMAGEITEM_DEFAULT_ADD);
-        String str[] = new String[hasSpace?selImageList.size()-1:selImageList.size()];
-        //最后一个不显示
-        for (int i = 0;i< str.length;i++) {
-            str[i] = selImageList.get(i).path;
-        }
-        return str;
     }
 }

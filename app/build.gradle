@@ -8,8 +8,8 @@ android {
         applicationId "com.ikkong.imagepickerdemo"
         minSdkVersion 11
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.1"
     }
     buildTypes {
         release {
@@ -26,8 +26,4 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.2.0'
     //图片选择器 https://github.com/jeasonlzy0216/ImagePicker
     compile 'com.lzy.widget:imagepicker:0.1.4'
-    //支持缩放的imageView https://github.com/chrisbanes/PhotoView
-    compile 'com.github.chrisbanes:PhotoView:1.2.6'
-    //图片浏览
-    compile 'com.liangfeizc:SlidePageIndicator:1.1.0@aar'
 }

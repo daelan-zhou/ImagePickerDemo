@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     
-    <android.support.v4.view.ViewPager
+    <com.lzy.imagepicker.view.ViewPagerFixed
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
     <RelativeLayout
+        android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="#cc22292c"

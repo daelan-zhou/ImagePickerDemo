@@ -21,8 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.liangfeizc.slidepager.SlidePagerActivity" 
-            android:screenOrientation="portrait"/>
+        <activity android:name=".ImagePreviewDelActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImagePickerThemeFullScreen"/>
     </application>
 
 </manifest>
