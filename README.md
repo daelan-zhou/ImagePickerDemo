@@ -6,6 +6,7 @@
 * [https://github.com/jeasonlzy0216/ImagePicker](https://github.com/jeasonlzy0216/ImagePicker) 
 
 完善了调用界面及删除逻辑等
+相关代码已提交合并到 ImagePicker ，建议直接使用 ImagePicker
 
 ## 演示
  ![image](https://github.com/ikkong/ImagePickerDemo/blob/master/resource/imagepicker.gif)
